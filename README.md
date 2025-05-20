@@ -1,54 +1,65 @@
-# React + TypeScript + Vite
+# Book Recommendation App – Case Study
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simplified book recommendation system developed as part of the BASF case study interview process. The application is built using React, TypeScript, Vite, and Ant Design, and aims to provide a clean and interactive user experience.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React with TypeScript
+- Vite (development server and bundler)
+- Ant Design (UI framework)
+- Axios (for HTTP requests)
+- React Router (routing)
+- Redux Toolkit (for state management, planned)
 
-## Expanding the ESLint configuration
+## Features (in progress)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- [x] User login with session management via localStorage
+- [x] Route protection for authenticated users
+- [ ] Display of a static/dynamic book list with search
+- [ ] Book detail view with rating and review form
+- [ ] Client-side state management using Redux Toolkit
+- [ ] Google Books API integration
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Setup and Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/mrkty/book-recommendation-app.git
+   cd book-recommendation-app
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open the app in your browser at:
+   ```
+   http://localhost:5173
+   ```
+
+## Authentication
+
+The app starts with a login screen. After submitting a username and password, the credentials are stored in localStorage. Access to protected routes such as the book list and review pages is restricted to authenticated users.
+
+## Project Structure
+
+```
+src/
+├── components/       # Shared UI components
+├── pages/            # Login, BookList, BookDetail
+├── routes/           # Route configuration and protection
+├── store/            # Redux slices and store setup (planned)
+├── styles/           # SCSS styles
+├── types/            # TypeScript interfaces and enums
+└── utils/            # Axios instance and other helpers
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## License
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+This project is licensed under the MIT License. See the LICENSE file for details.
