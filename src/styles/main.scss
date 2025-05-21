@@ -27,3 +27,15 @@
   background-color: #f5faff !important;
   cursor: pointer;
 }
+
+.ag-cell-focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.ag-theme-alpine .ag-cell:hover,
+.ag-theme-quartz .ag-cell:hover {
+  cursor: pointer;
+}

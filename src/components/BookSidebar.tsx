@@ -4,6 +4,7 @@ import { Button, Rate, Spin, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { setReview } from '../store/reviewsSlice';
+import { useMemo } from 'react';
 
 const { Text } = Typography;
 
@@ -18,7 +19,8 @@ interface BookSidebarProps {
 
 const BookSidebar: FC<BookSidebarProps> = ({ bookId, volume, sale, imgLoaded, setImgLoaded, imageUrl }) => {
   const dispatch = useDispatch();
-  const review = useSelector((state: RootState) => state.reviews[bookId] || { rating: 0, text: '' });
+  const defaultReview = useMemo(() => ({ rating: 0, text: '' }), []);
+  const review = useSelector((state: RootState) => state.reviews[bookId] || defaultReview);
 
   return (
     <div style={{ position: 'sticky', top: 32, alignSelf: 'flex-start', height: 'fit-content', textAlign: 'center' }}>

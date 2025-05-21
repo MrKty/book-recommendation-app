@@ -13,17 +13,13 @@ const Header = () => {
 
   const isBookDetail = location.pathname.includes('/book/');
 
-  const handleSearch = (value: string) => {
-    dispatch(setSearchQuery(value.trim()));
-  };
-
   return (
     <div
       style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '12px 24px',
+        padding: '16px 24px',
         borderBottom: '1px solid #eee',
         backgroundColor: '#fff',
         boxShadow: '0 1px 3px rgba(0,0,0,0.05)',

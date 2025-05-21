@@ -1,5 +1,5 @@
 import { Input, Select } from 'antd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const { Search } = Input;
 
@@ -34,20 +34,33 @@ const SearchWithFilter = ({
     const [searchValue, setSearchValue] = useState(initialQuery);
     const [field, setField] = useState(initialField);
     const [genre, setGenre] = useState(initialGenre);
+    const previousGenre = useRef<string>(initialGenre);
 
     const handleSearch = () => {
-        if (!searchValue.trim() && !genre) {
+        const trimmed = searchValue.trim();
+        let queryParts: string[] = [];
+
+        if (!trimmed && !genre) {
             onSearch('subject:fiction');
             return;
         }
 
-        let queryParts: string[] = [];
+        const lowerTrimmed = trimmed.toLowerCase();
+        const isFieldPrefixed = searchFields.some((f) =>
+            lowerTrimmed.startsWith(`${f.value}:`)
+        );
 
-        if (searchValue.trim()) {
-            queryParts.push(`${field}:${searchValue.trim()}`);
+        const alreadyIncludesGenre = lowerTrimmed.includes(`subject:${genre}`);
+
+        if (trimmed) {
+            if (isFieldPrefixed) {
+                queryParts.push(trimmed);
+            } else {
+                queryParts.push(`${field}:${trimmed}`);
+            }
         }
 
-        if (genre) {
+        if (genre && !alreadyIncludesGenre) {
             queryParts.push(`subject:${genre}`);
         }
 
@@ -65,7 +78,10 @@ const SearchWithFilter = ({
 
     // Genre change triggers search immediately
     useEffect(() => {
-        handleSearch();
+        if (previousGenre.current !== genre) {
+            previousGenre.current = genre;
+            handleSearch();
+        }
     }, [genre]);
 
     return (
@@ -78,7 +94,7 @@ const SearchWithFilter = ({
             />
             <Search
                 value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
                 onSearch={handleSearch}
                 enterButton
                 placeholder="Enter keyword"
