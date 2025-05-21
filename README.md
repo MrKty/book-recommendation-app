@@ -9,16 +9,30 @@ This is a simplified book recommendation system developed as part of the BASF ca
 - Ant Design (UI framework)
 - Axios (for HTTP requests)
 - React Router (routing)
-- Redux Toolkit (for state management, planned)
+- Redux Toolkit (for state management)
 
-## Features (in progress)
+## Features
 
 - [x] User login with session management via localStorage
-- [x] Route protection for authenticated users
-- [ ] Display of a static/dynamic book list with search
-- [ ] Book detail view with rating and review form
-- [ ] Client-side state management using Redux Toolkit
-- [ ] Google Books API integration
+- [x] Protected routes for authenticated access
+- [x] Book list fetched dynamically from Google Books API
+- [x] Real-time search by title or author
+- [x] Book detail view with:
+  - Ratings (from API + user-adjusted)
+  - Reviews with persistent client-side state
+  - Preview embedded via Google Books iframe
+- [x] Responsive layout with sticky sidebar
+- [x] Styled with custom Ant Design theming and SCSS
+
+## Additional Functionality and UI Features
+
+- Interactive star rating component with Redux-backed state
+- Review form with validation and confirmation message
+- Tabbed layout for switching between "Book Info" and "Preview"
+- Dynamic loading placeholders for cover image
+- Sticky sidebar for action buttons and rating
+- Responsive design supporting tablet and desktop views
+- Use of icons, spinners, and status feedback via Ant Design components
 
 ## Setup and Installation
 
@@ -45,19 +59,19 @@ This is a simplified book recommendation system developed as part of the BASF ca
 
 ## Authentication
 
-The app starts with a login screen. After submitting a username and password, the credentials are stored in localStorage. Access to protected routes such as the book list and review pages is restricted to authenticated users.
+The app starts with a login screen. After submitting a username and password, credentials are stored in localStorage. All internal routes (e.g., book list and detail view) are protected and require authentication.
 
 ## Project Structure
 
 ```
 src/
-├── components/       # Shared UI components
+├── components/       # Reusable UI components (Sidebar, Tabs, Header)
 ├── pages/            # Login, BookList, BookDetail
-├── routes/           # Route configuration and protection
-├── store/            # Redux slices and store setup (planned)
-├── styles/           # SCSS styles
-├── types/            # TypeScript interfaces and enums
-└── utils/            # Axios instance and other helpers
+├── routes/           # App router and route guards
+├── store/            # Redux slices and store configuration
+├── styles/           # SCSS styles and variables
+├── types/            # TypeScript types and interfaces
+└── utils/            # Axios instance and helpers
 ```
 
 ## License
