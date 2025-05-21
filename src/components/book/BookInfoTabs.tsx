@@ -2,9 +2,9 @@ import { FC, useMemo, useState } from 'react';
 import { Collapse, Descriptions, Divider, Rate, Tabs, Tag, Typography, Input, Button, message } from 'antd';
 import parse from 'html-react-parser';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { setReview } from '../store/reviewsSlice';
-import { DetailedBook } from '../types/detailedBook';
+import { RootState } from '../../store';
+import { setReview } from '../../store/reviewsSlice';
+import { DetailedBook } from '../../types/detailedBook';
 
 const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;

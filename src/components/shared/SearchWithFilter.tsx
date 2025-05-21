@@ -1,5 +1,5 @@
 import { Input, Select } from 'antd';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useMemo } from 'react';
 
 const { Search } = Input;
 
@@ -34,13 +34,12 @@ const SearchWithFilter = ({
     const [searchValue, setSearchValue] = useState(initialQuery);
     const [field, setField] = useState(initialField);
     const [genre, setGenre] = useState(initialGenre);
-    const previousGenre = useRef<string>(initialGenre);
 
-    const handleSearch = () => {
-        const trimmed = searchValue.trim();
+    const buildQueryAndSearch = (fieldParam = field, valueParam = searchValue, genreParam = genre) => {
+        const trimmed = valueParam.trim();
         let queryParts: string[] = [];
 
-        if (!trimmed && !genre) {
+        if (!trimmed && !genreParam) {
             onSearch('subject:fiction');
             return;
         }
@@ -50,39 +49,34 @@ const SearchWithFilter = ({
             lowerTrimmed.startsWith(`${f.value}:`)
         );
 
-        const alreadyIncludesGenre = lowerTrimmed.includes(`subject:${genre}`);
+        const alreadyIncludesGenre = lowerTrimmed.includes(`subject:${genreParam}`);
 
         if (trimmed) {
             if (isFieldPrefixed) {
                 queryParts.push(trimmed);
             } else {
-                queryParts.push(`${field}:${trimmed}`);
+                queryParts.push(`${fieldParam}:${trimmed}`);
             }
         }
 
-        if (genre && !alreadyIncludesGenre) {
-            queryParts.push(`subject:${genre}`);
+        if (genreParam && !alreadyIncludesGenre) {
+            queryParts.push(`subject:${genreParam}`);
         }
 
         onSearch(queryParts.join('+'));
     };
 
-    const genreOptions = [
-        {
-            label: 'All Genres',
-            value: '',
-            disabled: searchValue.trim() === '',
-        },
+    const genreOptions = useMemo(() => [
+        { label: 'All Genres', value: '', disabled: searchValue.trim() === '' },
         ...genres,
-    ];
+    ], [searchValue]);
 
-    // Genre change triggers search immediately
+    // Genre change triggers search immediately, This is wrong way
+    /*
     useEffect(() => {
-        if (previousGenre.current !== genre) {
-            previousGenre.current = genre;
-            handleSearch();
-        }
+        handleSearch();
     }, [genre]);
+    */
 
     return (
         <div style={{ display: 'flex', gap: 8 }}>
@@ -95,7 +89,7 @@ const SearchWithFilter = ({
             <Search
                 value={searchValue}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
-                onSearch={handleSearch}
+                onSearch={(value: string) => buildQueryAndSearch(field, value, genre)}
                 enterButton
                 placeholder="Enter keyword"
                 allowClear
@@ -103,7 +97,10 @@ const SearchWithFilter = ({
             />
             <Select
                 value={genre}
-                onChange={setGenre}
+                onChange={(newGenre) => {
+                    setGenre(newGenre);
+                    buildQueryAndSearch(field, searchValue, newGenre);
+                }}
                 style={{ width: 180 }}
                 options={genreOptions}
             />

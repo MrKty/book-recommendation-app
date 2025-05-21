@@ -1,9 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setSearchQuery } from '../store/searchSlice';
+import { setSearchQuery } from '../../store/searchSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { RootState } from '../store';
-import SearchWithFilter from './SearchWithFilter';
+import { RootState } from '../../store';
+import SearchWithFilter from '../shared/SearchWithFilter';
+import { Typography } from 'antd';
+
+const { Title } = Typography;
 
 const Header = () => {
   const location = useLocation();
@@ -35,9 +38,9 @@ const Header = () => {
             style={{ fontSize: 18, cursor: 'pointer' }}
           />
         )}
-        <h2 style={{ margin: 0 }}>
+        <Title level={4} style={{ margin: 0 }}>
           {isBookDetail ? 'Book Details' : 'Book List'}
-        </h2>
+        </Title>
       </div>
 
       {!isBookDetail && (

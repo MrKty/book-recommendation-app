@@ -1,35 +1,17 @@
 import { useLocation, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Spin, Col } from 'antd';
-import { DetailedBook } from '../types/detailedBook';
-import api from '../utils/axios';
-import BookSidebar from '../components/BookSidebar';
-import BookInfoTabs from '../components/BookInfoTabs';
+import BookSidebar from '../components/book/BookSidebar';
+import BookInfoTabs from '../components/book/BookInfoTabs';
+import useBookDetail from '../hooks/useBookDetail';
 
 const BookDetail = () => {
   const { state } = useLocation();
   const { selfLink } = state;
   const { id } = useParams();
 
-  const [book, setBook] = useState<DetailedBook | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { book, loading, error } = useBookDetail(selfLink);
   const [imgLoaded, setImgLoaded] = useState(false);
-
-  useEffect(() => {
-    const fetchBookDetail = async () => {
-      setLoading(true);
-      try {
-        const res = await api.get(selfLink);
-        setBook(res.data);
-      } catch (err) {
-        console.error('Failed to fetch book detail:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (selfLink) fetchBookDetail();
-  }, [selfLink]);
 
   if (!id || loading || !book) {
     return (
@@ -48,6 +30,8 @@ const BookDetail = () => {
   }
 
   const volume = book.volumeInfo;
+
+  // Not memoized
   const imageUrl = (volume.imageLinks?.large || volume.imageLinks?.thumbnail || '').replace(/^http:\/\//, 'https://');
 
   return (

@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { BookOutlined } from '@ant-design/icons';
 import { Button, Rate, Spin, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { setReview } from '../store/reviewsSlice';
+import { RootState } from '../../store';
+import { setReview } from '../../store/reviewsSlice';
 import { useMemo } from 'react';
 
 const { Text } = Typography;
