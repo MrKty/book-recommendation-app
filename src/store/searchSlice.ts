@@ -5,8 +5,9 @@ const searchSlice = createSlice({
   initialState: '',
   reducers: {
     setSearchQuery: (state, action) => action.payload,
+    resetSearch: () => '',
   },
 });
 
-export const { setSearchQuery } = searchSlice.actions;
+export const { setSearchQuery, resetSearch } = searchSlice.actions;
 export default searchSlice.reducer;

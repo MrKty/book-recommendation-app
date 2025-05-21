@@ -1,21 +1,21 @@
-import { Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchQuery } from '../store/searchSlice';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { RootState } from '../store';
+import SearchWithFilter from './SearchWithFilter';
 
 const Header = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const query = useSelector((state) => state.search);
+  const query = useSelector((state: RootState) => state.search);
+
+  const isBookDetail = location.pathname.includes('/book/');
 
   const handleSearch = (value: string) => {
     dispatch(setSearchQuery(value.trim()));
   };
-
-  const isBookDetail = location.pathname.includes('/book/');
 
   return (
     <div
@@ -45,13 +45,9 @@ const Header = () => {
       </div>
 
       {!isBookDetail && (
-        <Input.Search
-          placeholder="Search by title or author"
-          enterButton
-          allowClear
-          defaultValue={query}
-          onSearch={handleSearch}
-          style={{ width: 300 }}
+        <SearchWithFilter
+          initialQuery={query}
+          onSearch={(finalQuery) => dispatch(setSearchQuery(finalQuery))}
         />
       )}
     </div>

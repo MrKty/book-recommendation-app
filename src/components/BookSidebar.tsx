@@ -99,7 +99,7 @@ const BookSidebar: FC<BookSidebarProps> = ({ bookId, volume, sale, imgLoaded, se
         </Button>
       )}
 
-      {sale?.buyLink && sale?.listPrice?.amount && sale?.listPrice?.currencyCode && (
+      {sale?.buyLink && sale?.listPrice?.amount && sale?.listPrice?.currencyCode ? (
         <Button
           shape="round"
           size="large"
@@ -115,6 +115,10 @@ const BookSidebar: FC<BookSidebarProps> = ({ bookId, volume, sale, imgLoaded, se
         >
           Buy for {sale.listPrice.amount.toFixed(2)} {sale.listPrice.currencyCode}
         </Button>
+      ) : (
+        <div style={{ color: '#999', fontStyle: 'italic', marginBottom: 24 }}>
+          Not available for buying
+        </div>
       )}
 
       <Rate

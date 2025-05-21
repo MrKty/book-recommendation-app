@@ -66,13 +66,15 @@ const BookInfoTabs: FC<BookInfoTabsProps> = ({ book }) => {
           {volume.authors?.join(', ')}
         </Text>
 
-        {adjustedAverage > 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '8px 0' }}>
-            <Rate disabled allowHalf defaultValue={adjustedAverage} style={{ color: '#ed872d' }} />
-            <Text strong style={{ fontSize: 20 }}>{adjustedAverage.toFixed(2)}</Text>
-            {adjustedCount > 0 && <Text type="secondary">· {adjustedCount.toLocaleString()} ratings</Text>}
-          </div>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '8px 0' }}>
+          <Rate disabled allowHalf value={adjustedAverage} style={{ color: '#ed872d' }} />
+          <Text strong style={{ fontSize: 20 }}>
+            {adjustedAverage > 0 ? adjustedAverage.toFixed(2) : '0.00'}
+          </Text>
+          <Text type="secondary">
+            · {adjustedCount > 0 ? `${adjustedCount.toLocaleString()} ratings` : 'No ratings yet'}
+          </Text>
+        </div>
 
         <Paragraph style={{ marginTop: 16, maxWidth: 800 }}>
           {renderDescription()}
@@ -132,55 +134,64 @@ const BookInfoTabs: FC<BookInfoTabsProps> = ({ book }) => {
           </Collapse.Panel>
         </Collapse>
 
-        <Divider style={{ marginTop: 48 }} />
-
-        <div style={{ textAlign: 'center', padding: '32px 0' }}>
-          <Title level={3} style={{ fontWeight: 700, marginBottom: 8 }}>
-            What do <em style={{ fontStyle: 'italic' }}>you</em> think?
-          </Title>
-
-          <Rate
-            style={{ fontSize: 28, marginBottom: 8 }}
-            value={review.rating}
-            onChange={(value) =>
-              dispatch(setReview({ id: book.id, rating: value, text: review.text }))
-            }
-          />
-          <div style={{ marginBottom: 16, fontSize: 16, color: '#444' }}>
-            Rate this book
-          </div>
-
-          <TextArea
-            rows={4}
-            placeholder="Write your thoughts about this book..."
-            value={review.text}
-            onChange={(e) =>
-              dispatch(setReview({ id: book.id, rating: review.rating, text: e.target.value }))
-            }
-            style={{
-              width: '100%',
-              maxWidth: 600,
-              margin: '0 auto 24px',
-              display: 'block',
-            }}
-          />
-
-          <Button
-            type="primary"
-            size="large"
-            shape="round"
-            disabled={!review.text}
-            style={{ fontWeight: 600, padding: '0 32px' }}
-            onClick={() => {
-              dispatch(setReview({ id: book.id, rating: review.rating, text: review.text }));
-              message.success('Your review has been saved.');
-            }}
+        <Collapse
+          bordered={false}
+          style={{ marginTop: 12 }}
+          expandIconPosition="end"
+          defaultActiveKey={[]}
+        >
+          <Collapse.Panel
+            header={<Text strong>Your review</Text>}
+            key="review"
+            style={{ background: 'transparent' }}
           >
-            Submit Review
-          </Button>
-        </div>
+            <div style={{ textAlign: 'center' }}>
+              <Title level={4} style={{ fontWeight: 600, marginBottom: 8 }}>
+                What do <em style={{ fontStyle: 'italic' }}>you</em> think?
+              </Title>
 
-        <Divider />
+              <Rate
+                style={{ fontSize: 28, marginBottom: 8 }}
+                value={review.rating}
+                onChange={(value) =>
+                  dispatch(setReview({ id: book.id, rating: value, text: review.text }))
+                }
+              />
+              <div style={{ marginBottom: 16, fontSize: 16, color: '#444' }}>
+                Rate this book
+              </div>
+
+              <TextArea
+                rows={4}
+                placeholder="Write your thoughts about this book..."
+                value={review.text}
+                onChange={(e) =>
+                  dispatch(setReview({ id: book.id, rating: review.rating, text: e.target.value }))
+                }
+                style={{
+                  width: '100%',
+                  maxWidth: 600,
+                  margin: '0 auto 24px',
+                  display: 'block',
+                }}
+              />
+
+              <Button
+                type="primary"
+                size="large"
+                shape="round"
+                disabled={!review.text}
+                style={{ fontWeight: 600, padding: '0 32px' }}
+                onClick={() => {
+                  dispatch(setReview({ id: book.id, rating: review.rating, text: review.text }));
+                  message.success('Your review has been saved.');
+                }}
+              >
+                Submit Review
+              </Button>
+            </div>
+          </Collapse.Panel>
+        </Collapse>
       </Tabs.TabPane>
 
       <Tabs.TabPane tab="Preview" key="preview">

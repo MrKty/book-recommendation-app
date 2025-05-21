@@ -7,18 +7,24 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Rate, Tag } from 'antd';
 import { BookOutlined } from '@ant-design/icons';
+import AuthorTags from '../components/AuthorTags';
+import { useDispatch } from 'react-redux';
+import { resetSearch } from '../store/searchSlice';
 
 const BookList = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const searchQuery = useSelector((state: RootState) => state.search);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const fetchBooks = async (query: string = 'fiction') => {
+  const fetchBooks = async (query: string = 'subject:fiction') => {
     setLoading(true);
     try {
       const formattedQuery = query.trim().replace(/\s+/g, '+');
-      const res = await api.get(`/volumes?q=${formattedQuery}&maxResults=40`);
+      const fullQuery = `${formattedQuery}`;
+
+      const res = await api.get(`/volumes?q=${fullQuery}&maxResults=40`);
       const items = res.data.items || [];
       const bookData: Book[] = items.map((item: any) => ({
         id: item.id,
@@ -38,7 +44,9 @@ const BookList = () => {
 
   // Fetch books whenever the query changes
   useEffect(() => {
-    fetchBooks(searchQuery || 'fiction');
+    dispatch(resetSearch());
+    fetchBooks(searchQuery || 'subject:fiction');
+    console.log('Fetching books with query:', searchQuery);
   }, [searchQuery]);
 
   const columns = [
@@ -46,6 +54,7 @@ const BookList = () => {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
+      width: '50%',
       render: (title: string) => (
         <span style={{ fontWeight: 500, fontSize: 16 }}>
           <BookOutlined style={{ marginRight: 8, color: '#1677ff' }} />
@@ -57,17 +66,14 @@ const BookList = () => {
       title: 'Author(s)',
       dataIndex: 'authors',
       key: 'authors',
-      render: (authors: string[]) =>
-        authors?.map((author) => (
-          <Tag key={author} color="blue">
-            {author}
-          </Tag>
-        )),
+      width: '30%',
+      render: (authors: string[]) => <AuthorTags authors={authors} />,
     },
     {
       title: 'Genre',
       dataIndex: 'categories',
       key: 'categories',
+      width: '10%',
       render: (categories: string[]) =>
         categories?.length
           ? categories.map((cat) => (
@@ -81,6 +87,7 @@ const BookList = () => {
       title: 'Avg. Rating',
       dataIndex: 'averageRating',
       key: 'averageRating',
+      width: '10%',
       render: (rating?: number) =>
         rating ? (
           <div>
